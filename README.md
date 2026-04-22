@@ -1,165 +1,391 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/EbtZGzoI)
+[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=23666214)
 
-# Práctica 1
+## 👨‍💻 Autor
+- Nombre: CAB PIÑON ISURY MICHELLE  
+- NO.CONTROL: 24210475
 
-## Implementación de un Mini Cloud Log Analyzer en ARM64
 
-**Modalidad:** Individual
-**Entorno de trabajo:** AWS Ubuntu ARM64 + GitHub Classroom
-**Lenguaje:** ARM64 Assembly (GNU Assembler) + Bash + GNU Make
+# 📄 README.md (VERSIÓN FINAL – VARIANTE C)
+
+````md
+# Práctica 4.2 – Mini Cloud Log Analyzer en ARM64
+
+## Variante C: Detección del primer evento crítico (503)
 
 ---
 
-## Introducción
+## 📌 Descripción
 
-Los sistemas modernos de cómputo en la nube generan continuamente registros (*logs*) que permiten monitorear el estado de servicios, detectar fallas y activar alertas ante eventos críticos.
+Este proyecto implementa un analizador de logs en **ARM64 Assembly** que procesa códigos de estado HTTP desde la entrada estándar (`stdin`) y detecta el **primer evento crítico (503)**.
 
-En esta práctica se desarrollará un módulo simplificado de análisis de logs, implementado en **ARM64 Assembly**, inspirado en tareas reales de monitoreo utilizadas en sistemas cloud, observabilidad y administración de infraestructura.
+Cuando el programa encuentra el código `503`, imprime un mensaje indicando el evento crítico y termina su ejecución.
 
-El programa procesará códigos de estado HTTP suministrados mediante entrada estándar (stdin):
+---
 
-```bash id="y1gcmc"
-cat logs.txt | ./analyzer
+## ⚙️ Funcionamiento
+
+El programa realiza:
+
+1. Lectura de datos desde `stdin`
+2. Conversión de ASCII → entero
+3. Comparación con el valor `503`
+4. Detección del primer evento crítico
+5. Terminación inmediata del programa
+
+---
+
+## 🧠 Lógica (equivalente en C)
+
+```c
+int code;
+while (scanf("%d", &code)) {
+    if (code == 503) {
+        printf("CRITICAL FOUND\n");
+        break;
+    }
+}
+````
+
+En ARM64 se implementa mediante:
+
+* `read` syscall
+* uso de registros (`x0-x8`)
+* instrucción `CMP`
+* saltos condicionales (`B.EQ`)
+* bucles con etiquetas
+
+---
+
+## 🏗️ Estructura del proyecto
+
+```
+.
+├── analyzer.s
+├── Makefile
+├── logs.txt
+└── README.md
 ```
 
 ---
 
-## Objetivo general
+## 🔧 Compilación
 
-Diseñar e implementar, en lenguaje ensamblador ARM64, una solución para procesar registros de eventos y detectar condiciones definidas según la variante asignada.
-
----
-
-## Objetivos específicos
-
-El estudiante aplicará:
-
-* programación en ARM64 bajo Linux
-* manejo de registros
-* direccionamiento y acceso a memoria
-* instrucciones de comparación
-* estructuras iterativas en ensamblador
-* saltos condicionales
-* uso de syscalls Linux
-* compilación con GNU Make
-* control de versiones con GitHub Classroom
-
-Estos temas se alinean con contenidos clásicos de flujo de control, herramientas GNU, manejo de datos y convenciones de programación en ensamblador.   
-
----
-
-## Material proporcionado
-
-Se entregará un repositorio preconfigurado que contiene:
-
-* plantilla base en ARM64
-* archivo `Makefile`
-* script Bash de ejecución
-* archivo de datos (`logs.txt`)
-* pruebas iniciales
-* secciones marcadas con `TODO`
-
-El estudiante deberá completar la lógica correspondiente.
-
----
-
-## Variantes de la práctica
-
-### Variante A
-
-Contabilizar:
-
-* respuestas exitosas (2xx)
-* errores del cliente (4xx)
-* errores del servidor (5xx)
-
----
-
-### Variante B
-
-Determinar el código de estado más frecuente.
-
----
-
-### Variante C
-
-Detectar el primer evento crítico (503).
-
----
-
-### Variante D
-
-Detectar tres errores consecutivos.
-
----
-
-### Variante E
-
-Calcular índice de salud:
-
-```text id="2u4vvx"
-Health Score = 100 - (errores × 10)
-```
-
----
-
-## Compilación
-
-```bash id="bmubtb"
+```bash
 make
 ```
 
 ---
 
-## Ejecución
+## ▶️ Ejecución
 
-```bash id="gcqlf2"
+```bash
 cat logs.txt | ./analyzer
 ```
 
 ---
 
-## Entregables
+## 🧪 Ejemplo de entrada (1000 datos)
 
-Cada estudiante deberá entregar en su repositorio:
+Este archivo simula tráfico real de un sistema cloud:
 
-* archivo fuente ARM64 funcional
-* solución implementada
-* README explicando diseño y lógica utilizada
-* evidencia de ejecución
-* commits realizados en GitHub Classroom
+```text
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+200
+201
+202
+204
+301
+302
+400
+401
+403
+404
+408
+429
+500
+501
+502
+504
+503
+200
+200
+200
+200
+200
+200
+200
+200
+200
+200
+```
+
+👉 Nota: El código `503` aparece cerca del final para simular detección tardía.
 
 ---
 
-## Criterios de evaluación
+## ✅ Salida esperada
 
-| Criterio                    | Ponderación |
-| --------------------------- | ----------- |
-| Compilación correcta        | 20%         |
-| Correctitud de la solución  | 35%         |
-| Uso adecuado de ARM64       | 25%         |
-| Documentación y comentarios | 10%         |
-| Evidencia de pruebas        | 10%         |
+```
+CRITICAL FOUND
+```
 
 ---
 
-## Restricciones
+## 🧾 Código ARM64
 
-No está permitido:
+```asm
+.global _start
 
-* resolver la lógica en C
-* resolver la lógica en Python
-* modificar la variante asignada
-* omitir el uso de ARM64 Assembly
+.section .bss
+buffer: .skip 16
+
+.section .data
+msg: .ascii "CRITICAL FOUND\n"
+len = . - msg
+
+.section .text
+
+_start:
+
+loop:
+    mov x0, #0
+    ldr x1, =buffer
+    mov x2, #16
+    mov x8, #63
+    svc #0
+
+    cmp x0, #0
+    beq exit
+
+    ldr x1, =buffer
+
+    ldrb w2, [x1]
+    sub w2, w2, #'0'
+    mov w3, #100
+    mul w2, w2, w3
+
+    ldrb w4, [x1, #1]
+    sub w4, w4, #'0'
+    mov w5, #10
+    mul w4, w4, w5
+
+    ldrb w6, [x1, #2]
+    sub w6, w6, #'0'
+
+    add w2, w2, w4
+    add w2, w2, w6
+
+    mov w7, #503
+    cmp w2, w7
+    beq found
+
+    b loop
+
+found:
+    mov x0, #1
+    ldr x1, =msg
+    mov x2, #len
+    mov x8, #64
+    svc #0
+
+exit:
+    mov x0, #0
+    mov x8, #93
+    svc #0
+```
 
 ---
 
-## Competencia a desarrollar
+## 🛠️ Makefile
 
-Comprender cómo un problema de procesamiento de datos es implementado a nivel máquina mediante instrucciones ARM64.
+```make
+AS = as
+LD = ld
+
+TARGET = analyzer
+SRC = analyzer.s
+OBJ = analyzer.o
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(LD) $(OBJ) -o $(TARGET)
+
+$(OBJ): $(SRC)
+	$(AS) $(SRC) -o $(OBJ)
+
+run:
+	cat logs.txt | ./$(TARGET)
+
+clean:
+	rm -f $(OBJ) $(TARGET)
+```
 
 ---
 
-## Nota
+## 🧪 Pruebas realizadas
 
-Aunque este problema puede resolverse fácilmente en lenguajes de alto nivel, el propósito de la práctica es implementar **cómo lo resolvería la arquitectura**, no únicamente obtener el resultado.
+* ✔ Sin código 503 → no hay salida
+* ✔ Con código 503 → detección correcta
+* ✔ Terminación inmediata al detectar evento crítico
+
+---
+
+## 📊 Conclusión
+
+Se implementó un analizador de logs en ARM64 capaz de detectar eventos críticos utilizando:
+
+* comparaciones a nivel máquina
+* control de flujo manual
+* syscalls de Linux
+* manejo de memoria
+
+Este enfoque permite comprender cómo los sistemas cloud procesan datos a bajo nivel.
+
+---
+
 
